@@ -1,0 +1,64 @@
+## Build results
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+## Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Cache / Temp
+*.cache
+*.dbmdl
+*.bak
+*.log
+*.vspscc
+*.vssscc
+*.tmp
+*.pidb
+*.svclog
+*.scc
+*.pdb
+
+## Publish outputs
+publish/
+*.Publish.xml
+
+## NuGet
+*.nupkg
+*.snupkg
+*.nuget.props
+*.nuget.targets
+.nuget/
+packages/
+project.lock.json
+project.fragment.lock.json
+
+## Rider (JetBrains)
+.idea/
+*.sln.iml
+
+## Entity Framework
+Migrations/ (se for usar migrações geradas localmente, pode manter)
+*.mdf
+*.ldf
+
+## Coverage / Test results
+*.coverage
+*.coveragexml
+TestResults/
+*.trx
+
+## Others
+node_modules/
+wwwroot/lib/
