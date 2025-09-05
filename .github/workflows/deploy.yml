@@ -1,0 +1,22 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main  # ou outra branch que você deseja monitorar
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Use .NET SDK 9.0
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: "9.0"
+      
+    - name: Run unit tests
+      run: dotnet test --filter FullyQualifiedName~Motorcycle-Rental-Tests.Unit ./Motorcycle-Rental-Tests/Motorcycle-Rental-Tests.csproj

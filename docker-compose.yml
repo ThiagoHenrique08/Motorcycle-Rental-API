@@ -1,0 +1,41 @@
+version: "3.9"
+
+volumes:
+  postgres_data:
+
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: Criativos123@
+      POSTGRES_DB: dbMotorcycleRental
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: Criativos123@
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - rabbitmq
+    command: >
+      sh wait-for-postgres.sh dotnet ef database update --project Motorcycle-Rental-Infrastructure/Motorcycle-Rental-Infrastructure.csproj
+      && dotnet Motorcycle-Rental-API.dll
