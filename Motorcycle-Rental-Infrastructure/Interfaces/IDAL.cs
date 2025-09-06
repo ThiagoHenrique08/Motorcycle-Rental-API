@@ -2,7 +2,7 @@
 
 namespace Motorcycle_Rental_Infrastructure.Interfaces
 {
-    public interface IEFRepository<T> where T : class
+    public interface IDAL<T> where T : class
     {
         public Task<ICollection<T>> ToListAsync();
         public Task<T> RegisterAsync(T objeto);

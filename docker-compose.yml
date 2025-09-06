@@ -36,6 +36,8 @@ services:
     depends_on:
       - postgres
       - rabbitmq
+    environment:
+      DATABASE_URL: "Host=postgres;Port=5432;Database=dbMotorcycleRental;Username=admin;Password=Criativos123@"
     command: >
       sh wait-for-postgres.sh dotnet ef database update --project Motorcycle-Rental-Infrastructure/Motorcycle-Rental-Infrastructure.csproj
       && dotnet Motorcycle-Rental-API.dll

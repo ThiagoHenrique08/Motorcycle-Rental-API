@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Motorcycle_Rental_Infrastructure.Repository
 {
-    public class DAL<T> : IEFRepository<T> where T : class
+    public class DAL<T> : IDAL<T> where T : class
     {
         private readonly ApplicationDbContext _context;
 

@@ -5,6 +5,8 @@ public class ApplicationDbContext : DbContext
 {
     public DbSet<MotorcycleNotification> Notifications { get; set; }
     public DbSet<Motorcycle> Motorcycles { get; set; }
+    public DbSet <DeliveryMan> DeliveryMans { get; set; }
+    public DbSet <Location> Locations { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
 

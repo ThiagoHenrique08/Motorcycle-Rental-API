@@ -10,7 +10,7 @@ namespace MotorcycleRental.Infrastructure
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
             // Connection string igual ao docker-compose
-            optionsBuilder.UseNpgsql("Host=postgres;Port=5432;Database=dbMotorcycleRental;Username=admin;Password=Criativos123@");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=dbMotorcycleRental;Username=postgres;Password=Criativos123@");
 
             return new ApplicationDbContext(optionsBuilder.Options);
         }

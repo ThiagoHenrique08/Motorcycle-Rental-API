@@ -53,19 +53,31 @@ namespace Motorcycle_Rental_API
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
+     
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Motorcycle API V1");
+                    c.RoutePrefix = string.Empty; // Swagger na raiz
+                });
+
+            if (!app.Environment.IsDevelopment())
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Motorcycle API V1");
-                c.RoutePrefix = string.Empty; // Swagger na raiz
-            });
-            app.ApplyMigrations();
+                app.ApplyMigrations();
+            }
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.UseMiddleware<ExceptionMiddleware>();
             app.MapControllers();
 
-            app.Run("http://0.0.0.0:8080");
+            if (!app.Environment.IsDevelopment())
+            {
+                app.Run("http://0.0.0.0:8080");
+            }
+            else
+            {
+                app.Run(); // localhost:5000 padrão ou o que estiver no launchSettings.json
+            }
         }
     }
 }

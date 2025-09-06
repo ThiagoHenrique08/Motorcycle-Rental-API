@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace Motorcycle_Rental_Infrastructure.Interfaces
 {
-    public interface  IMotorcycleRepository : IDAL<Motorcycle>
+    public interface IDeliveryManRepository : IDAL<DeliveryMan>
     {
+        Task<bool> ExistsByCNPJAsync(string cnpj);
+        Task<bool> ExistsByCNHAsync(string cnh);
     }
 }
