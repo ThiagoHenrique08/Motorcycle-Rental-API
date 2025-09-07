@@ -17,6 +17,7 @@ public class ExceptionMiddleware
         try
         {
             await _next(context);
+       
         }
         catch (BadRequestException ex)
         {
@@ -31,7 +32,7 @@ public class ExceptionMiddleware
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             context.Response.ContentType = "application/json";
 
-            var response = new { errors = new[] { "Ocorreu um erro inesperado." } };
+            var response = new { errors = new[] { "Ocorreu um erro inesperado na chamada do endpoint." } };
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
         }
     }

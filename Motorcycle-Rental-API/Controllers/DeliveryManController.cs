@@ -1,9 +1,7 @@
-﻿using FluentResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Motorcycle_Rental_API.Utils;
 using Motorcycle_Rental_Application.DTOs.DeliveryManDTO;
 using Motorcycle_Rental_Application.Interfaces.DeliveryManInterfaces;
-using Motorcycle_Rental_Domain.Models;
 
 namespace Motorcycle_Rental_API.Controllers
 {
@@ -39,22 +37,5 @@ namespace Motorcycle_Rental_API.Controllers
                 onFailure: result => BadRequest(new { mensagem = "Erro ao enviar a CNH", errors = result.Errors })
             );
         }
-
-
-
-        private async Task<Result<DeliveryMan>> GetDeliveryManByIdAsync(
-            string id,
-            IGetDeliveryManPerIdUseCase getDeliveryManUseCase)
-        {
-            var dto = new GetDeliveryManPerIdDTO(id);
-
-            var result = await getDeliveryManUseCase.ExecuteAsync(dto);
-
-            if (!result.IsSuccess)
-                return Result.Fail<DeliveryMan>(result.Errors);
-
-            return Result.Ok(result.Value);
-        }
-
     }
 }

@@ -1,7 +1,7 @@
 ﻿using FluentResults;
 using Microsoft.Extensions.Logging;
 using Motorcycle_Rental_Application.DTOs.MotorcycleDTO;
-using Motorcycle_Rental_Application.Interfaces.MotorcycleInterface;
+using Motorcycle_Rental_Application.Interfaces.MotorcycleInterfaces;
 using Motorcycle_Rental_Application.Validators.MotorcycleValidators;
 using Motorcycle_Rental_Infrastructure.Interfaces;
 

@@ -27,7 +27,7 @@ namespace Motorcycle_Rental_Infrastructure.Configuration
                    .IsRequired();
 
             builder.Property(deliveryman => deliveryman.BirthDate)
-                   .HasColumnType("TIMESTAMP")
+                   .HasColumnType("timestamp with time zone")
                    .IsRequired();
             builder.Property(deliveryman => deliveryman.CNHNumber)
                     .HasColumnType("VARCHAR(15)").HasMaxLength(15)

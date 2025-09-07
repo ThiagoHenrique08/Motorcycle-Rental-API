@@ -18,7 +18,7 @@ namespace Motorcycle_Rental_Infrastructure.Migrations
                     Identifier = table.Column<string>(type: "VARCHAR(36)", nullable: false),
                     Name = table.Column<string>(type: "VARCHAR(100)", maxLength: 100, nullable: false),
                     CNPJ = table.Column<string>(type: "VARCHAR(14)", maxLength: 14, nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CNHNumber = table.Column<string>(type: "VARCHAR(15)", maxLength: 15, nullable: false),
                     CNHType = table.Column<string>(type: "VARCHAR(10)", nullable: false),
                     ImageCnh = table.Column<string>(type: "TEXT", nullable: false)
@@ -62,20 +62,28 @@ namespace Motorcycle_Rental_Infrastructure.Migrations
                 name: "Locations",
                 columns: table => new
                 {
-                    LocationId = table.Column<Guid>(type: "UUID", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "TIMESTAMP ", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "TIMESTAMP ", nullable: false),
-                    EstimatedEndDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
+                    LocationId = table.Column<string>(type: "VARCHAR(100)", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EstimatedEndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ReturnDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Plan = table.Column<int>(type: "integer", nullable: false),
-                    EntregadorId = table.Column<string>(type: "VARCHAR(36)", nullable: false)
+                    DeliveryMan_Id = table.Column<string>(type: "VARCHAR(36)", nullable: false),
+                    Motorcycle_Id = table.Column<string>(type: "VARCHAR(36)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Locations", x => x.LocationId);
                     table.ForeignKey(
-                        name: "FK_Locations_DeliveryMans_EntregadorId",
-                        column: x => x.EntregadorId,
+                        name: "FK_Locations_DeliveryMans_DeliveryMan_Id",
+                        column: x => x.DeliveryMan_Id,
                         principalTable: "DeliveryMans",
+                        principalColumn: "Identifier",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Locations_Motorcycles_Motorcycle_Id",
+                        column: x => x.Motorcycle_Id,
+                        principalTable: "Motorcycles",
                         principalColumn: "Identifier",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -93,9 +101,15 @@ namespace Motorcycle_Rental_Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Locations_EntregadorId",
+                name: "IX_Locations_DeliveryMan_Id",
                 table: "Locations",
-                column: "EntregadorId",
+                column: "DeliveryMan_Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Locations_Motorcycle_Id",
+                table: "Locations",
+                column: "Motorcycle_Id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -112,13 +126,13 @@ namespace Motorcycle_Rental_Infrastructure.Migrations
                 name: "Locations");
 
             migrationBuilder.DropTable(
-                name: "Motorcycles");
-
-            migrationBuilder.DropTable(
                 name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "DeliveryMans");
+
+            migrationBuilder.DropTable(
+                name: "Motorcycles");
         }
     }
 }

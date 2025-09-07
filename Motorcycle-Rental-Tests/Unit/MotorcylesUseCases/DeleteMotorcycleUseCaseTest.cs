@@ -17,7 +17,8 @@ namespace Motorcycle_Rental_Tests.Unit.MotorcylesTests
             // Arrange
             var mockRepository = new Mock<IMotorcycleRepository>();
             var mockLogger = new Mock<ILogger<DeleteMotorcycleUseCase>>();
-    
+            var mockLocation = new Mock<ILocationRepository>();
+            
             var identifier = "Moto123";
             var requestDto = new DeleteMotorcycleDTO(identifier);
 
@@ -28,7 +29,7 @@ namespace Motorcycle_Rental_Tests.Unit.MotorcylesTests
             mockRepository
                 .Setup(repo => repo.DeleteAsync(It.IsAny<Motorcycle>()));
 
-            var useCase = new DeleteMotorcycleUseCase(mockRepository.Object, mockLogger.Object);
+            var useCase = new DeleteMotorcycleUseCase(mockRepository.Object, mockLogger.Object, mockLocation.Object);
 
             // Act
             var result = await useCase.ExecuteAsync(requestDto);

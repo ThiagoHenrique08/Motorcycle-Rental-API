@@ -1,12 +1,13 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Motorcycle_Rental_Application.Interfaces.DeliveryManInterfaces;
+using Motorcycle_Rental_Application.Interfaces.LocationInterfaces;
 using Motorcycle_Rental_Application.Interfaces.Motorcycle;
-using Motorcycle_Rental_Application.Interfaces.MotorcycleInterface;
 using Motorcycle_Rental_Application.Interfaces.MotorcycleInterfaces;
+using Motorcycle_Rental_Application.Interfaces.Services;
+using Motorcycle_Rental_Application.Services;
 using Motorcycle_Rental_Application.UseCases.DeliveryManUseCase;
+using Motorcycle_Rental_Application.UseCases.LocationUseCase;
 using Motorcycle_Rental_Application.UseCases.Motorcycle;
 using Motorcycle_Rental_Application.UseCases.MotorcycleUseCase;
 using Motorcycle_Rental_Infrastructure.Interfaces;
@@ -48,30 +49,16 @@ namespace Motorcycle_Rental_API.Extensions
             services.AddScoped<IDeliveryManRepository, DeliveryManRepository>();
             services.AddScoped<IStorageService, StorageService>();
             services.AddScoped<ICreateDeliveryManUseCase, CreateDeliveryManUseCase>();
-            services.AddScoped<IGetDeliveryManPerIdUseCase, GetDeliveryManPerIdUseCase>();
             services.AddScoped<IUploadCNHImageUseCase, UploadCNHImageUseCase>();
-
-
+            services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<ICreateLocationUseCase, CreateLocationUseCase>();
+            services.AddScoped<IGetLocationUseCase, GetLocationUseCase>();
+            services.AddScoped<IUpdateLocationUseCase, UpdateLocationUseCase>();
+            services.AddScoped<IServiceCalculateDailyValue, ServiceCalculateDailyValue>();
 
             return services;
         }
 
-        //public static IServiceCollection AddContextService(this IServiceCollection services)
-        //{
-        //    var configuration = new ConfigurationBuilder()
-        //       .AddJsonFile("appsettings.json")
-        //       .Build();
-
-        //    services.AddDbContext<ApplicationDbContext>(options =>
-        //    {
-        //        options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
-
-
-        //    }, ServiceLifetime.Scoped);
-
-
-        //    return services;
-        //}
         public static IServiceCollection AddContextService(this IServiceCollection services)
         {
             // Build da configuração localmente
@@ -95,9 +82,6 @@ namespace Motorcycle_Rental_API.Extensions
             return services;
         }
 
-
-
-
         public static IServiceCollection AddRabbitMqService(this IServiceCollection services)
         {
 
@@ -117,8 +101,6 @@ namespace Motorcycle_Rental_API.Extensions
                     config.ConfigureEndpoints(context);
                 });
             });
-
-
 
             return services;
         }

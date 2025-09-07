@@ -1,4 +1,3 @@
-using FluentAssertions;
 using FluentResults;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
@@ -7,12 +6,9 @@ using Moq;
 using Motorcycle_Rental_API.Controllers;
 using Motorcycle_Rental_Application.DTOs.MotorcycleDTO;
 using Motorcycle_Rental_Application.Interfaces.Motorcycle;
-using Motorcycle_Rental_Application.Interfaces.MotorcycleInterface;
-using Motorcycle_Rental_Application.UseCases.Motorcycle;
-using Motorcycle_Rental_Domain.Models;
+using Motorcycle_Rental_Application.Interfaces.MotorcycleInterfaces;
 using Motorcycle_Rental_Infrastructure.Interfaces;
 using Motorcycle_Rental_Tests.Builder;
-using System.Linq.Expressions;
 namespace Motorcycle_Rental_Tests.Unit.MotorcylesTests
 {
     public class UpdateMotorcyclesUseCaseTest

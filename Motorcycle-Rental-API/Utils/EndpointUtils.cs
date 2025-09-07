@@ -22,7 +22,7 @@ namespace Motorcycle_Rental_API.Utils
                 if (result.IsSuccess)
                 {
                     if (onSuccess != null)
-                        return onSuccess(result);
+                        return onSuccess(result.Value);
 
                     // Padrão: Created se tiver valor, NoContent se não
                     return result.Value != null

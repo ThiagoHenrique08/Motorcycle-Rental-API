@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Motorcycle_Rental_Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250906145600_MigrationInitial")]
+    [Migration("20250907141339_MigrationInitial")]
     partial class MigrationInitial
     {
         /// <inheritdoc />
@@ -30,7 +30,7 @@ namespace Motorcycle_Rental_Infrastructure.Migrations
                         .HasColumnType("VARCHAR(36)");
 
                     b.Property<DateTime>("BirthDate")
-                        .HasColumnType("TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CNHImage")
                         .IsRequired()
@@ -69,29 +69,39 @@ namespace Motorcycle_Rental_Infrastructure.Migrations
 
             modelBuilder.Entity("Motorcycle_Rental_Domain.Models.Location", b =>
                 {
-                    b.Property<Guid>("LocationId")
+                    b.Property<string>("LocationId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("UUID");
+                        .HasColumnType("VARCHAR(100)");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("TIMESTAMP ");
-
-                    b.Property<string>("EntregadorId")
+                    b.Property<string>("DeliveryMan_Id")
                         .IsRequired()
                         .HasColumnType("VARCHAR(36)");
 
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTime>("EstimatedEndDate")
-                        .HasColumnType("TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Motorcycle_Id")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(36)");
 
                     b.Property<int>("Plan")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("ReturnDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("TIMESTAMP ");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("LocationId");
 
-                    b.HasIndex("EntregadorId")
+                    b.HasIndex("DeliveryMan_Id")
+                        .IsUnique();
+
+                    b.HasIndex("Motorcycle_Id")
                         .IsUnique();
 
                     b.ToTable("Locations", (string)null);
@@ -155,14 +165,28 @@ namespace Motorcycle_Rental_Infrastructure.Migrations
                 {
                     b.HasOne("Motorcycle_Rental_Domain.Models.DeliveryMan", "DeliveryMan")
                         .WithOne("Location")
-                        .HasForeignKey("Motorcycle_Rental_Domain.Models.Location", "EntregadorId")
+                        .HasForeignKey("Motorcycle_Rental_Domain.Models.Location", "DeliveryMan_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Motorcycle_Rental_Domain.Models.Motorcycle", "Motorcycle")
+                        .WithOne("Location")
+                        .HasForeignKey("Motorcycle_Rental_Domain.Models.Location", "Motorcycle_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("DeliveryMan");
+
+                    b.Navigation("Motorcycle");
                 });
 
             modelBuilder.Entity("Motorcycle_Rental_Domain.Models.DeliveryMan", b =>
+                {
+                    b.Navigation("Location")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Motorcycle_Rental_Domain.Models.Motorcycle", b =>
                 {
                     b.Navigation("Location")
                         .IsRequired();

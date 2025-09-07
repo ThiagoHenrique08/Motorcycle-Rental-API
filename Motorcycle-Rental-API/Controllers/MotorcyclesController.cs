@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Motorcycle_Rental_API.Utils;
 using Motorcycle_Rental_Application.DTOs.MotorcycleDTO;
 using Motorcycle_Rental_Application.Interfaces.Motorcycle;
-using Motorcycle_Rental_Application.Interfaces.MotorcycleInterface;
 using Motorcycle_Rental_Application.Interfaces.MotorcycleInterfaces;
 using Motorcycle_Rental_Domain.Models;
 using Motorcycle_Rental_Infrastructure.Interfaces;
@@ -49,11 +48,7 @@ namespace Motorcycle_Rental_API.Controllers
                     return result;
                 },
                 _logger,
-                onSuccess: result => CreatedAtAction(
-                    nameof(GetPerId),
-                    new { id = result.Value.Identifier },
-                    new { mensagem = "Motorcycle registered and event published!" }
-                ),
+                onSuccess: result => StatusCode(201, new { mensagem = "Moto cadastrada com sucesso!" }),
                 onFailure: result => BadRequest(new { mensagem = "Dados inválidos", errors = result.Errors })
             );
         }
@@ -65,7 +60,7 @@ namespace Motorcycle_Rental_API.Controllers
             [FromBody] UpdateMotorcycleDTO dto,
             [FromServices] IUpdateMotorcycleUseCase updateMotorcycleUseCase)
         {
-       
+
 
             return await EndpointUtils.CallUseCase(
                 () => updateMotorcycleUseCase.ExecuteAsync(dto, id),
@@ -110,7 +105,7 @@ namespace Motorcycle_Rental_API.Controllers
         [HttpGet("list")]
         public async Task<IEnumerable<MotorcycleNotification>> Get()
         {
-          return await _motorcycleNotification.ToListAsync();
+            return await _motorcycleNotification.ToListAsync();
         }
 
         [HttpGet("{id}")]

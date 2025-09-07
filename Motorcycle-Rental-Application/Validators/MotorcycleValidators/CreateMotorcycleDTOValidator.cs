@@ -27,7 +27,6 @@ namespace Motorcycle_Rental_Application.Validators.MotorcycleValidators
                 .NotEmpty().WithMessage("Plate is required.")
                 .Length(8).WithMessage("The license plate must have 8 characters.");
 
-
         }
     }
 }

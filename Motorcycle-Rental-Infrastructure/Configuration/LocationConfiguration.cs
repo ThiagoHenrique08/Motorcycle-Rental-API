@@ -13,23 +13,31 @@ namespace Motorcycle_Rental_Infrastructure.Configuration
 
             builder.HasKey(location => location.LocationId);
 
-            builder.Property(location => location.LocationId).HasColumnType("UUID").ValueGeneratedOnAdd();
+            builder.Property(location => location.LocationId).HasColumnType("VARCHAR(100)").ValueGeneratedOnAdd();
+            builder.Property(location => location.DailyValue).HasColumnType("integer");
+            builder.Property(location => location.StartDate).HasColumnType("timestamp with time zone").IsRequired();
 
-            builder.Property(location => location.StartDate).HasColumnType("TIMESTAMP ").IsRequired();
+            builder.Property(location => location.EndDate).HasColumnType("timestamp with time zone").IsRequired();
 
-            builder.Property(location => location.EndDate).HasColumnType("TIMESTAMP ").IsRequired();
-
-            builder.Property(location => location.EstimatedEndDate).HasColumnType("TIMESTAMP").IsRequired();
-
+            builder.Property(location => location.EstimatedEndDate).HasColumnType("timestamp with time zone").IsRequired();
+            
+            builder.Property(location => location.ReturnDate).HasColumnType("timestamp with time zone").IsRequired();
+            
             builder.Property(location => location.Plan).IsRequired();
 
 
+            builder.Property(location => location.DeliveryMan_Id).IsRequired();
 
-            builder.Property(location => location.EntregadorId).IsRequired();
+            builder.HasOne(location => location.DeliveryMan).WithOne(dm => dm.Location).HasForeignKey<Location>(location => location.DeliveryMan_Id);
 
-            builder.HasOne(location => location.DeliveryMan).WithOne(dm => dm.Location).HasForeignKey<Location>(deliveryMan => deliveryMan.EntregadorId);
+            builder.HasIndex(location => location.DeliveryMan_Id).IsUnique();
 
-            builder.HasIndex(location => location.EntregadorId).IsUnique();
+           
+            builder.Property(location => location.Motorcycle_Id).IsRequired();
+
+            builder.HasOne(location => location.Motorcycle).WithOne(dm => dm.Location).HasForeignKey<Location>(location => location.Motorcycle_Id);
+
+            builder.HasIndex(location => location.Motorcycle_Id).IsUnique();
 
         }
     }
