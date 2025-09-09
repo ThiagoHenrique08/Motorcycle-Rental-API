@@ -27,6 +27,9 @@
     <ProjectReference Include="..\Motorcycle-Rental-Infrastructure\Motorcycle-Rental-Infrastructure.csproj" />
   </ItemGroup>
 
+
+
+
   <ItemGroup>
     <Folder Include="uploads\" />
   </ItemGroup>

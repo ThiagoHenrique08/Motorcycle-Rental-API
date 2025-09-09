@@ -1,34 +1,24 @@
 ﻿using FluentResults;
 using Microsoft.Extensions.Logging;
-using Motorcycle_Rental_Application.DTOs.DeliveryManDTO;
 using Motorcycle_Rental_Application.DTOs.LocationDTO;
-using Motorcycle_Rental_Application.Interfaces.DeliveryManInterfaces;
 using Motorcycle_Rental_Application.Interfaces.LocationInterfaces;
 using Motorcycle_Rental_Application.Interfaces.Services;
-using Motorcycle_Rental_Application.UseCases.DeliveryManUseCase;
-using Motorcycle_Rental_Application.Validators.DeliveryManValidators;
 using Motorcycle_Rental_Application.Validators.LocationValidators;
 using Motorcycle_Rental_Domain.Models;
 using Motorcycle_Rental_Infrastructure.Interfaces;
-using Motorcycle_Rental_Infrastructure.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Motorcycle_Rental_Application.UseCases.LocationUseCase
 {
-    
+
     public class CreateLocationUseCase(
         ILocationRepository repository,
-        ILogger<CreateLocationUseCase> logger) : ICreateLocationUseCase
+        ILogger<CreateLocationUseCase> logger, IServiceCalculateDailyValue serviceCalculatorDailyValue) : ICreateLocationUseCase
     {
        
 
         private readonly ILocationRepository _repository = repository;
         private readonly ILogger _logger = logger;
-        private readonly IServiceCalculateDailyValue _serviceCalculatorDailyValue;
+        private readonly IServiceCalculateDailyValue _serviceCalculatorDailyValue = serviceCalculatorDailyValue;
 
         public async Task<Result<Location>> ExecuteAsync(CreateLocationDTO dto, IDeliveryManRepository deliveryMan, IMotorcycleRepository motorcycle)
         {

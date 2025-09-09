@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using FluentValidation;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Motorcycle_Rental_Application.Interfaces.DeliveryManInterfaces;
 using Motorcycle_Rental_Application.Interfaces.LocationInterfaces;
@@ -10,6 +11,7 @@ using Motorcycle_Rental_Application.UseCases.DeliveryManUseCase;
 using Motorcycle_Rental_Application.UseCases.LocationUseCase;
 using Motorcycle_Rental_Application.UseCases.Motorcycle;
 using Motorcycle_Rental_Application.UseCases.MotorcycleUseCase;
+using Motorcycle_Rental_Application.Validators.MotorcycleValidators;
 using Motorcycle_Rental_Infrastructure.Interfaces;
 using Motorcycle_Rental_Infrastructure.Repository;
 using Motorcycle_Rental_Infrastructure.Services;
@@ -105,5 +107,13 @@ namespace Motorcycle_Rental_API.Extensions
             return services;
         }
 
-    }
+        public static IServiceCollection AddValidatorsService(this IServiceCollection services)
+        {
+            services.AddValidatorsFromAssembly(typeof(CreateMotorcycleDTOValidator).Assembly);
+
+
+            return services;
+        }
+
+        }
 }

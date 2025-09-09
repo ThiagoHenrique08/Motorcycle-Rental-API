@@ -7,6 +7,8 @@ using Motorcycle_Rental_API.Controllers;
 using Motorcycle_Rental_Application.DTOs.DeliveryManDTO;
 using Motorcycle_Rental_Application.Interfaces.DeliveryManInterfaces;
 using Motorcycle_Rental_Tests.Builder;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace Motorcycle_Rental_Tests.Unit.DeliveryManUseCases
 {
@@ -18,16 +20,11 @@ namespace Motorcycle_Rental_Tests.Unit.DeliveryManUseCases
             // Arrange
 
             var createBuilder = new CreateDeliveyManDTOBuilder();
-            var dto = new CreateDeliveryManDTO
-            {
-                Identifier = createBuilder.Identifier,
-                Name = createBuilder.Name,
-                CNPJ = createBuilder.CNPJ,
-                BirthDate = createBuilder.BirthDate,
-                CNHNumber = createBuilder.CNHNumber,
-                CNHType = createBuilder.CNHType,
-                CNHImage = createBuilder.CNHImage
-            };
+            var dto = new CreateDeliveryManDTO(
+                createBuilder.Identifier, createBuilder.Name,
+                createBuilder.CNPJ, createBuilder.BirthDate, createBuilder.CNHNumber, 
+                createBuilder.CNHType, createBuilder.CNHImage);
+       
 
             var useCaseMock = new Mock<ICreateDeliveryManUseCase>();
             
@@ -52,16 +49,10 @@ namespace Motorcycle_Rental_Tests.Unit.DeliveryManUseCases
         {
             // Arrange
             var createBuilder = new CreateDeliveyManDTOBuilder();
-            var dto = new CreateDeliveryManDTO
-            {
-                Identifier = createBuilder.Identifier,
-                Name = createBuilder.Name,
-                CNPJ = createBuilder.CNPJ,
-                BirthDate = createBuilder.BirthDate,
-                CNHNumber = createBuilder.CNHNumber,
-                CNHType = createBuilder.CNHType,
-                CNHImage = createBuilder.CNHImage
-            };
+            var dto = new CreateDeliveryManDTO(
+                createBuilder.Identifier, createBuilder.Name,
+                createBuilder.CNPJ, createBuilder.BirthDate, createBuilder.CNHNumber,
+                createBuilder.CNHType, createBuilder.CNHImage);
 
             var useCaseMock = new Mock<ICreateDeliveryManUseCase>();
             useCaseMock.Setup(u => u.ExecuteAsync(dto))

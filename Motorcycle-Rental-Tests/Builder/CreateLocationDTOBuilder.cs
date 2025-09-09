@@ -1,10 +1,5 @@
-﻿using Motorcycle_Rental_Domain.Enum;
-using Motorcycle_Rental_Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Motorcycle_Rental_Application.DTOs.LocationDTO;
+using Motorcycle_Rental_Domain.Enum;
 
 namespace Motorcycle_Rental_Tests.Builder
 {
@@ -64,17 +59,10 @@ namespace Motorcycle_Rental_Tests.Builder
             return this;
         }
 
-        public Location Build()
+        public CreateLocationDTO Build()
         {
-            return new Location
-            {
-                DeliveryMan_Id = this.DeliveryMan_Id,
-                Motorcycle_Id = this.Motorcycle_Id,
-                StartDate = this.StartDate,
-                EndDate = this.EndDate,
-                EstimatedEndDate = this.EstimatedEndDate,
-                Plan = this.Plan
-            };
+            return new CreateLocationDTO(DeliveryMan_Id, Motorcycle_Id, StartDate, EndDate, EstimatedEndDate, Plan);
+        
         }
     }
 

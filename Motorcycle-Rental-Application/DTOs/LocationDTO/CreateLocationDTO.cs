@@ -7,14 +7,16 @@ using System.Threading.Tasks;
 
 namespace Motorcycle_Rental_Application.DTOs.LocationDTO
 {
-    public class CreateLocationDTO
+    public class CreateLocationDTO(string deliveryMan_Id, string motorcycle_Id, DateTime startDate, DateTime endDate, DateTime estimatedEndDate, Plan plan)
     {
-        public string DeliveryMan_Id { get; set; }
-        public string Motorcycle_Id { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public DateTime EstimatedEndDate { get; set; }
-        public Plan Plan { get; set; }
-        
+
+        public string DeliveryMan_Id { get; set; } = deliveryMan_Id;
+        public string Motorcycle_Id { get; set; } = motorcycle_Id;
+        public DateTime StartDate { get; set; } = startDate;
+        public DateTime EndDate { get; set; } = endDate;
+        public DateTime EstimatedEndDate { get; set; } = estimatedEndDate;
+        public Plan Plan { get; set; } = plan;
+
+
     }   
 }

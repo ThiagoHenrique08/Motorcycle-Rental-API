@@ -14,31 +14,32 @@ namespace Motorcycle_Rental_API.Controllers
     [ApiController]
     public class MotorcyclesController : ControllerBase
     {
-        private readonly ILogger<MotorcyclesController> _logger;
-        private readonly ICreateMotorcycleUseCase _createMotorcycleUseCase;
-        private readonly IPublishEndpoint _publishEndpoint;
+   
+    
+       
         public readonly IMotorcycleNotificationRepository _motorcycleNotification;
-        public MotorcyclesController(ILogger<MotorcyclesController> logger, ICreateMotorcycleUseCase createMotorcycleUseCase, IPublishEndpoint publishEndpoint, IMotorcycleNotificationRepository motorcycleNotification)
+        public MotorcyclesController(IMotorcycleNotificationRepository motorcycleNotification)
         {
-            _logger = logger;
-            _createMotorcycleUseCase = createMotorcycleUseCase;
-            _publishEndpoint = publishEndpoint;
+    
             _motorcycleNotification = motorcycleNotification;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateMotorcycleDTO dto)
+        public async Task<IActionResult> Create([FromBody] CreateMotorcycleDTO dto, 
+            [FromServices] ICreateMotorcycleUseCase createMotorcycleUseCase,
+            [FromServices] ILogger<MotorcyclesController> logger,
+            [FromServices] IPublishEndpoint publishEndpoint)
         {
             return await EndpointUtils.CallUseCase(
                 async () =>
                 {
-                    var result = await _createMotorcycleUseCase.ExecuteAsync(dto);
+                    var result = await createMotorcycleUseCase.ExecuteAsync(dto);
 
                     if (!result.IsSuccess)
                         return result;
 
                     // Publica evento no RabbitMQ via MassTransit usando classe concreta
-                    await _publishEndpoint.Publish(new MotorcycleCreatedEvent(
+                    await publishEndpoint.Publish(new MotorcycleCreatedEvent(
                         result.Value.Identifier,
                         result.Value.Year,
                         result.Value.Model,
@@ -47,7 +48,7 @@ namespace Motorcycle_Rental_API.Controllers
 
                     return result;
                 },
-                _logger,
+                logger,
                 onSuccess: result => StatusCode(201, new { mensagem = "Moto cadastrada com sucesso!" }),
                 onFailure: result => BadRequest(new { mensagem = "Dados inválidos", errors = result.Errors })
             );
@@ -58,13 +59,14 @@ namespace Motorcycle_Rental_API.Controllers
         public async Task<IActionResult> Update(
             string id,
             [FromBody] UpdateMotorcycleDTO dto,
-            [FromServices] IUpdateMotorcycleUseCase updateMotorcycleUseCase)
+            [FromServices] IUpdateMotorcycleUseCase updateMotorcycleUseCase,
+            [FromServices] ILogger<MotorcyclesController> logger)
         {
 
 
             return await EndpointUtils.CallUseCase(
                 () => updateMotorcycleUseCase.ExecuteAsync(dto, id),
-                _logger,
+                logger,
                 onSuccess: result => Ok(new { mensagem = "Placa modificada com sucesso" }),
                 onFailure: result => BadRequest(new { mensagem = "Dados inválidos", errors = result.Errors })
             );
@@ -73,11 +75,12 @@ namespace Motorcycle_Rental_API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(
             string id,
-            [FromServices] IDeleteMotorcycleUseCase deleteMotorcycleUseCase)
+            [FromServices] IDeleteMotorcycleUseCase deleteMotorcycleUseCase,
+            [FromServices] ILogger<MotorcyclesController> logger)
         {
             return await EndpointUtils.CallUseCase(
                 () => deleteMotorcycleUseCase.ExecuteAsync(new DeleteMotorcycleDTO(id)),
-                _logger,
+                logger,
                 onSuccess: result => Ok(new { mensagem = "Motocicleta deletada com sucesso" }),
                 onFailure: result => BadRequest(new { mensagem = "Dados inválidos", errors = result.Errors })
             );
@@ -86,7 +89,8 @@ namespace Motorcycle_Rental_API.Controllers
         [HttpGet("by-plate")]
         public async Task<IActionResult> GetPerPlate(
             [FromQuery] string plate,
-            [FromServices] IGetMotorcyclePerPlateUseCase getMotorcyclePerPlateUseCase)
+            [FromServices] IGetMotorcyclePerPlateUseCase getMotorcyclePerPlateUseCase,
+            [FromServices] ILogger<MotorcyclesController> logger)
         {
             return await EndpointUtils.CallUseCase(
                 async () =>
@@ -96,7 +100,7 @@ namespace Motorcycle_Rental_API.Controllers
                         ? Result.Ok(result.Value)
                         : Result.Fail<Motorcycle_Rental_Domain.Models.Motorcycle>(result.Errors);
                 },
-                _logger,
+                logger,
                 onSuccess: result => Ok(result.Value),
                 onFailure: result => NotFound(new { errors = result.Errors })
             );
@@ -109,7 +113,9 @@ namespace Motorcycle_Rental_API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPerId(string id, [FromServices] IGetMotorcyclePerIdUseCase getMotorcyclePerIdUseCase)
+        public async Task<IActionResult> GetPerId(string id, 
+            [FromServices] IGetMotorcyclePerIdUseCase getMotorcyclePerIdUseCase,
+            [FromServices] ILogger<MotorcyclesController> logger)
         {
             return await EndpointUtils.CallUseCase(
                 async () =>
@@ -119,7 +125,7 @@ namespace Motorcycle_Rental_API.Controllers
                     ? Result.Ok(result.Value)
                     : Result.Fail<Motorcycle_Rental_Domain.Models.Motorcycle>(result.Errors);
                 },
-                _logger,
+                logger,
                 onSuccess: result => Ok(result.Value),
                 onFailure: result =>
                 {

@@ -26,10 +26,10 @@ namespace Motorcycle_Rental_Tests.Unit.LocationUseCases
                 .Setup(x => x.ExecuteAsync(It.IsAny<UpdateLocationDTO>(), It.IsAny<string>()))
                 .ReturnsAsync(Result.Ok());
 
-            var controller = new LocationController(_loggerMock.Object);
+            var controller = new LocationController();
 
             // Act
-            var result = await controller.Update("1", new UpdateLocationDTO(DateTime.UtcNow), useCaseMock.Object);
+            var result = await controller.Update("1", new UpdateLocationDTO(DateTime.UtcNow), useCaseMock.Object, _loggerMock.Object);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -45,10 +45,10 @@ namespace Motorcycle_Rental_Tests.Unit.LocationUseCases
                 .Setup(x => x.ExecuteAsync(It.IsAny<UpdateLocationDTO>(), It.IsAny<string>()))
                 .ReturnsAsync(Result.Fail(new List<string> { "Erro ao atualizar" }));
 
-            var controller = new LocationController(_loggerMock.Object);
+            var controller = new LocationController();
 
             // Act
-            var result = await controller.Update("1", new UpdateLocationDTO(DateTime.UtcNow), useCaseMock.Object);
+            var result = await controller.Update("1", new UpdateLocationDTO(DateTime.UtcNow), useCaseMock.Object, _loggerMock.Object);
 
             // Assert
             var badRequest = Assert.IsType<BadRequestObjectResult>(result);

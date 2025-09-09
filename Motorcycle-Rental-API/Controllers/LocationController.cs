@@ -12,13 +12,9 @@ namespace Motorcycle_Rental_API.Controllers
     [ApiController]
     public class LocationController : ControllerBase
     {
-        private readonly ILogger<LocationController> _logger;
 
-        public LocationController(ILogger<LocationController> logger)
-        {
-            _logger = logger;
-        }
 
+    
         [HttpPost]
         public async Task<IActionResult> Create(
             [FromBody] CreateLocationDTO dto,
@@ -39,8 +35,8 @@ namespace Motorcycle_Rental_API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(
             [FromRoute] string id,
-            [FromServices]
-            IGetLocationUseCase getLocationByIdUseCase)
+            [FromServices]IGetLocationUseCase getLocationByIdUseCase,
+            [FromServices] ILogger<LocationController> logger)
         {
             return await EndpointUtils.CallUseCase(async () =>
             {
@@ -49,7 +45,7 @@ namespace Motorcycle_Rental_API.Controllers
                 ? Result.Ok(result.Value)
                 : Result.Fail<GetLocationDTO>(result.Errors);
             },
-                _logger,
+                logger,
                 onSuccess: result => Ok(result.Value),
                onFailure: result =>
                {
@@ -75,13 +71,14 @@ namespace Motorcycle_Rental_API.Controllers
         public async Task<IActionResult> Update(
             string id,
             [FromBody] UpdateLocationDTO dto,
-            [FromServices] IUpdateLocationUseCase updateLocationUseCase)
+            [FromServices] IUpdateLocationUseCase updateLocationUseCase,
+            [FromServices] ILogger<LocationController> logger)
         {
 
 
             return await EndpointUtils.CallUseCase(
                 () => updateLocationUseCase.ExecuteAsync(dto, id),
-                _logger,
+                logger,
                 onSuccess: result => Ok(new { mensagem = "Data da devolução informada com sucesso" }),
                 onFailure: result => BadRequest(new { mensagem = "Dados inválidos", errors = result.Errors })
             );

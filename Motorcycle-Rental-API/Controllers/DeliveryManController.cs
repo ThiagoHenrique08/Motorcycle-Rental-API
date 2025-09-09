@@ -10,7 +10,10 @@ namespace Motorcycle_Rental_API.Controllers
     public class DeliveryManController : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateDeliveryManDTO dto,[FromServices] ICreateDeliveryManUseCase useCase,[FromServices] ILogger<DeliveryManController> logger)
+        public async Task<IActionResult> Create(
+            [FromBody] CreateDeliveryManDTO dto,
+            [FromServices] ICreateDeliveryManUseCase useCase,
+            [FromServices] ILogger<DeliveryManController> logger)
         {
             return await EndpointUtils.CallUseCase(
                 () => useCase.ExecuteAsync(dto),

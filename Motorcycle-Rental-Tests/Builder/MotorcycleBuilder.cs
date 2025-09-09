@@ -1,6 +1,6 @@
 ﻿namespace Motorcycle_Rental_Tests.Builder
 {
-    internal class MotorcycleBuilder
+    public class MotorcycleBuilder
     {
 
         public string Identifier { get; set; }

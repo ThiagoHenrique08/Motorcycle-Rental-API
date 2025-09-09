@@ -42,9 +42,9 @@ namespace Motorcycle_Rental_API
             // Habilitar FluentValidation
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddFluentValidationClientsideAdapters();
-
             // Registrar todos os Validators da Assembly
-            builder.Services.AddValidatorsFromAssemblyContaining<CreateMotorcycleDTOValidator>();
+            builder.Services.AddValidatorsService();
+            
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

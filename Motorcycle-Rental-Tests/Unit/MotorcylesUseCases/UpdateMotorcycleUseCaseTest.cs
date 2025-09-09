@@ -23,12 +23,11 @@ namespace Motorcycle_Rental_Tests.Unit.MotorcylesTests
             var fakeCreateUseCase = new Mock<ICreateMotorcycleUseCase>();
             var fakePublish = new Mock<IPublishEndpoint>();
             var fakeNotificationRepo = new Mock<IMotorcycleNotificationRepository>();
-
+            
             _controller = new MotorcyclesController(
-                _loggerMock.Object,
-                fakeCreateUseCase.Object,
-                fakePublish.Object,
+
                 fakeNotificationRepo.Object
+             
             );
         }
 
@@ -38,11 +37,7 @@ namespace Motorcycle_Rental_Tests.Unit.MotorcylesTests
             // Arrange
             var motorcycle = new MotorcycleBuilder().Build();
 
-            var motorcycleDTO = new UpdateMotorcycleDTO(motorcycle.Plate)
-            {
-                Plate = motorcycle.Plate
-
-            };
+            var motorcycleDTO = new UpdateMotorcycleDTO { Plate = motorcycle.Plate };
 
 
             var _updateUseCaseMock = new Mock<IUpdateMotorcycleUseCase>();
@@ -52,7 +47,7 @@ namespace Motorcycle_Rental_Tests.Unit.MotorcylesTests
                 .ReturnsAsync(Result.Ok());
 
             // Act
-            var result = await _controller.Update(motorcycle.Identifier, motorcycleDTO, _updateUseCaseMock.Object);
+            var result = await _controller.Update(motorcycle.Identifier, motorcycleDTO, _updateUseCaseMock.Object, _loggerMock.Object);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -68,7 +63,7 @@ namespace Motorcycle_Rental_Tests.Unit.MotorcylesTests
         {      // Arrange
             var motorcycle = new MotorcycleBuilder().Build();
 
-            var motorcycleDTO = new UpdateMotorcycleDTO(motorcycle.Plate)
+            var motorcycleDTO = new UpdateMotorcycleDTO()
             {
                 Plate = motorcycle.Plate + "PlacaErrada"
 
@@ -82,7 +77,7 @@ namespace Motorcycle_Rental_Tests.Unit.MotorcylesTests
                 .ReturnsAsync(Result.Fail("Erro de validação"));
 
             // Act
-            var result = await _controller.Update(motorcycle.Identifier, motorcycleDTO, _updateUseCaseMock.Object);
+            var result = await _controller.Update(motorcycle.Identifier, motorcycleDTO, _updateUseCaseMock.Object, _loggerMock.Object);
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);

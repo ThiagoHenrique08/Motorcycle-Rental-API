@@ -28,7 +28,10 @@ namespace Motorcycle_Rental_Application.UseCases.LocationUseCase
                 return Result.Fail(errors);
             }
 
-            var location = await locationRepository.RecoverByAsync(m => m.LocationId == id);
+            var location = await _locationRepository.RecoverByAsync(m => m.LocationId == id);
+
+            if (location is null)
+                return Result.Fail<GetLocationDTO>("Locação não encontrada");
 
             var locationDTO = new GetLocationDTO
             {
@@ -41,9 +44,6 @@ namespace Motorcycle_Rental_Application.UseCases.LocationUseCase
                 EstimatedEndDate = location.EstimatedEndDate,
                 ReturnDate = location.ReturnDate,
             };
-
-            if (location is null)
-                return Result.Fail<GetLocationDTO>("Locação não encontrada");
 
             return Result.Ok(locationDTO);
         }

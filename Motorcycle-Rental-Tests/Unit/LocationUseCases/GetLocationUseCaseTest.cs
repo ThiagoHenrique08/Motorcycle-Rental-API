@@ -26,10 +26,10 @@ namespace Motorcycle_Rental_Tests.Unit.LocationUseCases
                 .Setup(x => x.ExecuteAsync(It.IsAny<string>()))
                 .ReturnsAsync(Result.Ok(new GetLocationDTO()));
 
-            var controller = new LocationController(_loggerMock.Object);
+            var controller = new LocationController();
 
             // Act
-            var result = await controller.GetById("1", useCaseMock.Object);
+            var result = await controller.GetById("1", useCaseMock.Object, _loggerMock.Object);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -45,10 +45,10 @@ namespace Motorcycle_Rental_Tests.Unit.LocationUseCases
                 .Setup(x => x.ExecuteAsync(It.IsAny<string>()))
                 .ReturnsAsync(Result.Fail<GetLocationDTO>(new List<string> { "Id inválido" }));
 
-            var controller = new LocationController(_loggerMock.Object);
+            var controller = new LocationController();
 
             // Act
-            var result = await controller.GetById("1", useCaseMock.Object);
+            var result = await controller.GetById("1", useCaseMock.Object, _loggerMock.Object);
 
             // Assert
             var badRequest = Assert.IsType<BadRequestObjectResult>(result);
@@ -66,10 +66,10 @@ namespace Motorcycle_Rental_Tests.Unit.LocationUseCases
                 .Setup(x => x.ExecuteAsync(It.IsAny<string>()))
                 .ReturnsAsync(Result.Fail<GetLocationDTO>("Locação não encontrada"));
 
-            var controller = new LocationController(_loggerMock.Object);
+            var controller = new LocationController();
 
             // Act
-            var result = await controller.GetById("999", useCaseMock.Object);
+            var result = await controller.GetById("999", useCaseMock.Object, _loggerMock.Object);
 
             // Assert
             var notFound = Assert.IsType<NotFoundObjectResult>(result);
