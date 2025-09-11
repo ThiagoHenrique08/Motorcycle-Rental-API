@@ -12,12 +12,16 @@ namespace Motorcycle_Rental_API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            builder.Services.AddIdentityService();
             builder.Services.AddCorsService();
             builder.Services.AddCorsService();
             builder.Services.AddDomainService();
             builder.Services.AddContextService();
             builder.Services.AddRabbitMqService();
+            builder.Services.AddTokenService();
+            builder.Services.AddAuthenticationService(builder);
+            builder.Services.AddAuthorizationService();
+            builder.Services.AddSwaggerGen();
             builder.Services.AddControllers()
                 .ConfigureApiBehaviorOptions(options =>
                 {
@@ -38,7 +42,8 @@ namespace Motorcycle_Rental_API
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                     options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 });
-
+            
+            builder.Services.AddOutputCache();
             // Habilitar FluentValidation
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddFluentValidationClientsideAdapters();
@@ -48,7 +53,7 @@ namespace Motorcycle_Rental_API
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+           
 
             var app = builder.Build();
 
@@ -58,7 +63,8 @@ namespace Motorcycle_Rental_API
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Motorcycle API V1");
-                    c.RoutePrefix = string.Empty; // Swagger na raiz
+                    c.RoutePrefix = string.Empty;
+                    c.DefaultModelsExpandDepth(-1);// Swagger na raiz
                 });
 
             if (!app.Environment.IsDevelopment())
@@ -69,10 +75,11 @@ namespace Motorcycle_Rental_API
             app.UseAuthorization();
             app.UseMiddleware<ExceptionMiddleware>();
             app.MapControllers();
+            app.UseCors("MyPolicy");
 
             if (!app.Environment.IsDevelopment())
             {
-                app.Run("http://0.0.0.0:8080");
+                app.Run("http://0.0.0.0:8080"); // Roda no docker.
             }
             else
             {

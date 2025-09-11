@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Motorcycle_Rental_API.Utils;
 using Motorcycle_Rental_Application.DTOs.MotorcycleDTO;
@@ -25,6 +26,7 @@ namespace Motorcycle_Rental_API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "ADMIN")]
         public async Task<IActionResult> Create([FromBody] CreateMotorcycleDTO dto, 
             [FromServices] ICreateMotorcycleUseCase createMotorcycleUseCase,
             [FromServices] ILogger<MotorcyclesController> logger,
@@ -56,6 +58,7 @@ namespace Motorcycle_Rental_API.Controllers
 
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "ADMIN")]
         public async Task<IActionResult> Update(
             string id,
             [FromBody] UpdateMotorcycleDTO dto,
@@ -73,6 +76,7 @@ namespace Motorcycle_Rental_API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "ADMIN")]
         public async Task<IActionResult> Delete(
             string id,
             [FromServices] IDeleteMotorcycleUseCase deleteMotorcycleUseCase,
@@ -87,6 +91,7 @@ namespace Motorcycle_Rental_API.Controllers
         }
 
         [HttpGet("by-plate")]
+        [Authorize(Policy = "ADMIN")]
         public async Task<IActionResult> GetPerPlate(
             [FromQuery] string plate,
             [FromServices] IGetMotorcyclePerPlateUseCase getMotorcyclePerPlateUseCase,
@@ -106,13 +111,8 @@ namespace Motorcycle_Rental_API.Controllers
             );
         }
 
-        [HttpGet("list")]
-        public async Task<IEnumerable<MotorcycleNotification>> Get()
-        {
-            return await _motorcycleNotification.ToListAsync();
-        }
-
         [HttpGet("{id}")]
+        [Authorize(Policy = "ADMIN")]
         public async Task<IActionResult> GetPerId(string id, 
             [FromServices] IGetMotorcyclePerIdUseCase getMotorcyclePerIdUseCase,
             [FromServices] ILogger<MotorcyclesController> logger)

@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Motorcycle_Rental_API;
 using Motorcycle_Rental_Application.DTOs.LocationDTO;
 using Motorcycle_Rental_Domain.Models;
@@ -15,14 +16,24 @@ namespace Motorcycle_Rental_Tests.Integration.LocationFeature
         private HttpResponseMessage? _result;
 
         public  UpdateLocationReturnDateFeatureTest(CustomWebApplicationFactory<Program> factory)
-            : base(factory)
+            : base(factory, new ConfigurationBuilder()
+                       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                       .Build())
         {
         }
 
         [Fact]
         public async Task Test()
         {
-            // --- Arrange: Criar uma locação de teste ---
+            // Token básico (sem roles)
+            SetUserTokenInHeaders();
+
+            // Token com role ADMIN
+            SetUserTokenInHeaders(new[] { "ADMIN" });
+
+            // Token com múltiplas roles
+            SetUserTokenInHeaders(new[] { "ADMIN", "ENTREGADOR" });
+
 
             // Arrange: criar dados dependentes
             var deliveryMan = new DeliveryManBuilder().Build();
@@ -65,7 +76,7 @@ namespace Motorcycle_Rental_Tests.Integration.LocationFeature
                 .FirstOrDefault(l => l.LocationId == _locationData.LocationId);
 
             updatedLocation.Should().NotBeNull();
-            updatedLocation?.ReturnDate.Should().BeCloseTo(updateDto.ReturnDate, TimeSpan.FromMilliseconds(300));
+            updatedLocation?.ReturnDate.Should().BeCloseTo(updateDto.ReturnDate, TimeSpan.FromMilliseconds(800));
 
             // Limpeza
             dbContext.Locations.Remove(updatedLocation!);

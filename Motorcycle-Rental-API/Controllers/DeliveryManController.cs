@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Motorcycle_Rental_API.Utils;
 using Motorcycle_Rental_Application.DTOs.DeliveryManDTO;
 using Motorcycle_Rental_Application.Interfaces.DeliveryManInterfaces;
@@ -10,6 +11,8 @@ namespace Motorcycle_Rental_API.Controllers
     public class DeliveryManController : ControllerBase
     {
         [HttpPost]
+        [Authorize(Policy = "ENTREGADOR")]
+        [Authorize(Policy = "ADMIN")]
         public async Task<IActionResult> Create(
             [FromBody] CreateDeliveryManDTO dto,
             [FromServices] ICreateDeliveryManUseCase useCase,
@@ -24,6 +27,8 @@ namespace Motorcycle_Rental_API.Controllers
         }
 
         [HttpPost("{id}/cnh")]
+        [Authorize(Policy = "ENTREGADOR")]
+        [Authorize(Policy = "ADMIN")]
         public async Task<IActionResult> UploadCNH(
             string id,
             [FromBody] UploadCNHDTO dto,

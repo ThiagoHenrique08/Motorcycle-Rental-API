@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Motorcycle_Rental_API;
 using Motorcycle_Rental_Application.DTOs.DeliveryManDTO;
 using Motorcycle_Rental_Domain.Models;
@@ -16,13 +17,25 @@ namespace Motorcycle_Rental_Tests.Integration.DeliveryManIntegrationTest
         private HttpResponseMessage? _result;
 
         public UploadCNHIntegrationTest(CustomWebApplicationFactory<Program> factory)
-            : base(factory) { }
+            : base(factory, new ConfigurationBuilder()
+                       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                       .Build()) { }
 
 
         [Fact]
         public async Task Test()
         {
             // Arrange
+
+            // Token básico (sem roles)
+            SetUserTokenInHeaders();
+
+            // Token com role ADMIN
+            SetUserTokenInHeaders(new[] { "ADMIN" });
+
+            // Token com múltiplas roles
+            SetUserTokenInHeaders(new[] { "ADMIN", "ENTREGADOR" });
+
             var deliveryMan = new DeliveryManBuilder().Build();
             _dbContext.DeliveryMans.Add(deliveryMan);
             await _dbContext.SaveChangesAsync();

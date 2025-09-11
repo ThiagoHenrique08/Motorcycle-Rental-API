@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Motorcycle_Rental_API;
 using Motorcycle_Rental_Tests.Builder;
 using Motorcycle_Rental_Tests.Integration;
@@ -11,13 +12,23 @@ public sealed class CreateDeliveryManIntegrationTests : BaseIntegrationTests, ID
 
     private HttpResponseMessage? _result;
     public CreateDeliveryManIntegrationTests(CustomWebApplicationFactory<Program> factory)
-         : base(factory)
+         : base(factory, new ConfigurationBuilder()
+                       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                       .Build())
     {
     }
 
     [Fact]
     public async Task Test()
     {
+        // Token básico (sem roles)
+        SetUserTokenInHeaders();
+
+        // Token com role ADMIN
+        SetUserTokenInHeaders(new[] { "ADMIN" });
+
+        // Token com múltiplas roles
+        SetUserTokenInHeaders(new[] { "ADMIN", "ENTREGADOR" });
         // Arrange
         var dto = new DeliveryManBuilder().Build();
 

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Motorcycle_Rental_API;
 using Motorcycle_Rental_Application.DTOs.LocationDTO;
 using Motorcycle_Rental_Domain.Models;
@@ -12,7 +13,9 @@ using System.Text.Json;
 namespace Motorcycle_Rental_Tests.Integration.LocationFeature
 {
     public sealed class GetLocationByIdFeatureTest(CustomWebApplicationFactory<Program> factory)
-        : BaseIntegrationTests(factory), IDisposable
+        : BaseIntegrationTests(factory, new ConfigurationBuilder()
+                       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                       .Build()), IDisposable
     {
         private Location? _locationData;
         private HttpResponseMessage? _result;
@@ -21,6 +24,16 @@ namespace Motorcycle_Rental_Tests.Integration.LocationFeature
         public async Task Test()
         {
             // Arrange: cria uma locação de teste
+
+            // Token básico (sem roles)
+            SetUserTokenInHeaders();
+
+            // Token com role ADMIN
+            SetUserTokenInHeaders(new[] { "ADMIN" });
+
+            // Token com múltiplas roles
+            SetUserTokenInHeaders(new[] { "ADMIN", "ENTREGADOR" });
+
             var deliveryMan = new DeliveryManBuilder().Build();
             var motorcycle = new MotorcycleBuilder().Build();
             _dbContext.DeliveryMans.Add(deliveryMan);

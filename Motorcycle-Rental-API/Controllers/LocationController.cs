@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Motorcycle_Rental_API.Utils;
 using Motorcycle_Rental_Application.DTOs.LocationDTO;
@@ -16,6 +17,7 @@ namespace Motorcycle_Rental_API.Controllers
 
     
         [HttpPost]
+        [Authorize(Policy = "ENTREGADOR")]
         public async Task<IActionResult> Create(
             [FromBody] CreateLocationDTO dto,
             [FromServices] ICreateLocationUseCase useCase,
@@ -33,6 +35,7 @@ namespace Motorcycle_Rental_API.Controllers
 
 
         [HttpGet("{id}")]
+        [Authorize(Policy = "ENTREGADOR")]
         public async Task<IActionResult> GetById(
             [FromRoute] string id,
             [FromServices]IGetLocationUseCase getLocationByIdUseCase,
@@ -68,6 +71,7 @@ namespace Motorcycle_Rental_API.Controllers
 
         [HttpPut]
         [Route("{id}/return")]
+        [Authorize(Policy = "ENTREGADOR")]
         public async Task<IActionResult> Update(
             string id,
             [FromBody] UpdateLocationDTO dto,

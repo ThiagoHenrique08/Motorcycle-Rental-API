@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Motorcycle_Rental_API;
 using Motorcycle_Rental_Domain.Models;
 using Motorcycle_Rental_Tests.Builder;
@@ -13,11 +14,22 @@ public sealed class CreateLocationFeatureTest : BaseIntegrationTests, IDisposabl
     private HttpResponseMessage? _result;
 
     public CreateLocationFeatureTest(CustomWebApplicationFactory<Program> factory)
-        : base(factory) { }
+        : base(factory, new ConfigurationBuilder()
+                       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                       .Build()) { }
 
     [Fact]
     public async Task Test()
     {
+        // Token básico (sem roles)
+        SetUserTokenInHeaders();
+
+        // Token com role ADMIN
+        SetUserTokenInHeaders(new[] { "ADMIN" });
+
+        // Token com múltiplas roles
+        SetUserTokenInHeaders(new[] { "ADMIN", "ENTREGADOR" });
+
         // Arrange: criar dados dependentes
         var deliveryMan = new DeliveryManBuilder().Build();
 

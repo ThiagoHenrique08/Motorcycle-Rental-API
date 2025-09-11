@@ -1,12 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Motorcycle_Rental_Domain.Models;
-
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string,
+    IdentityUserClaim<string>,
+    IdentityUserRole<string>,
+    IdentityUserLogin<string>,
+    IdentityRoleClaim<string>,
+    IdentityUserToken<string>>
 {
     public DbSet<MotorcycleNotification> Notifications { get; set; }
     public DbSet<Motorcycle> Motorcycles { get; set; }
-    public DbSet <DeliveryMan> DeliveryMans { get; set; }
-    public DbSet <Location> Locations { get; set; }
+    public DbSet<DeliveryMan> DeliveryMans { get; set; }
+    public DbSet<Location> Locations { get; set; }
+    public DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
 
@@ -14,9 +21,9 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         //garante que as configurações da classe base sejam aplicadas antes de aplicar configurações específicas
-        base.OnModelCreating(modelBuilder); 
+        base.OnModelCreating(modelBuilder);
 
-        // Esta configuração global percorre todos os relacionamentos de chave estrangeira no modelo (GetForeignKeys()) e define o comportamento de exclusão como Cascade.
+        //Esta configuração global percorre todos os relacionamentos de chave estrangeira no modelo(GetForeignKeys()) e define o comportamento de exclusão como Cascade.
         foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
         {
             relationship.DeleteBehavior = DeleteBehavior.Cascade;

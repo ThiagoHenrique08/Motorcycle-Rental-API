@@ -9,6 +9,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Motorcycle_Rental_API;
+using Microsoft.Extensions.Configuration;
 
 namespace Motorcycle_Rental_Tests.Integration.MotorcycleIntegrationTest
 {
@@ -17,11 +18,22 @@ namespace Motorcycle_Rental_Tests.Integration.MotorcycleIntegrationTest
         private HttpResponseMessage? _result;
 
         public GetMotorcyclePerPlateIntegrationTests(CustomWebApplicationFactory<Program> factory)
-            : base(factory) { }
+            : base(factory, new ConfigurationBuilder()
+                       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                       .Build()) { }
 
         [Fact]
-        public async Task Test_GetMotorcyclePerPlate_ShouldReturn200AndEntity()
+        public async Task Test()
         {
+            // Token básico (sem roles)
+            SetUserTokenInHeaders();
+
+            // Token com role ADMIN
+            SetUserTokenInHeaders(new[] { "ADMIN" });
+
+            // Token com múltiplas roles
+            SetUserTokenInHeaders(new[] { "ADMIN", "ENTREGADOR" });
+
             var motorcycle = new MotorcycleBuilder().Build();
             _dbContext.Motorcycles.Add(motorcycle);
             await _dbContext.SaveChangesAsync();

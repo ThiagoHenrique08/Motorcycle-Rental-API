@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Motorcycle_Rental_Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250910012243_Include Identity")]
+    partial class IncludeIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,7 +253,7 @@ namespace Motorcycle_Rental_Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ApplicationUserRoles", (string)null);
+                    b.ToTable("ApplicationUserRoleEnterprisesTenants", (string)null);
                 });
 
             modelBuilder.Entity("Motorcycle_Rental_Domain.Models.DeliveryMan", b =>

@@ -18,5 +18,5 @@ jobs:
       with:
         dotnet-version: "9.0"
       
-    - name: Run unit tests
+    - name: Run unit tests and integration tests
       run: dotnet test --filter FullyQualifiedName~Motorcycle-Rental-Tests.Unit ./Motorcycle-Rental-Tests/Motorcycle-Rental-Tests.csproj

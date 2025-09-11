@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using FluentAssertions;
 using MassTransit;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -19,7 +20,9 @@ namespace Motorcycle_Rental_Tests.Integration.MotorcycleIntegrationTest
         private HttpResponseMessage? _result;
 
         public CreateMotorcycleIntegrationTests(CustomWebApplicationFactory<Program> factory)
-            : base(factory)
+            : base(factory, new ConfigurationBuilder()
+                       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                       .Build())
         {
 
         }
@@ -27,6 +30,15 @@ namespace Motorcycle_Rental_Tests.Integration.MotorcycleIntegrationTest
         [Fact]
         public async Task Test()
         {
+            // Token básico (sem roles)
+            SetUserTokenInHeaders();
+
+            // Token com role ADMIN
+            SetUserTokenInHeaders(new[] { "ADMIN" });
+
+            // Token com múltiplas roles
+            SetUserTokenInHeaders(new[] { "ADMIN", "ENTREGADOR" });
+
             // Arrange: cria DTO de teste
             var dto = new MotorcycleBuilder().Build();
             var createDto = new CreateMotorcycleDTO(dto.Identifier, dto.Year, dto.Model, dto.Plate);
