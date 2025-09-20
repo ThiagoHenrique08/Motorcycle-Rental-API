@@ -41,12 +41,12 @@ namespace Motorcycle_Rental_API.Controllers
                         return result;
 
                     // Publica evento no RabbitMQ via MassTransit usando classe concreta
-                    await publishEndpoint.Publish(new MotorcycleCreatedEvent(
-                        result.Value.Identifier,
-                        result.Value.Year,
-                        result.Value.Model,
-                        result.Value.Plate
-                    ));
+                    //await publishEndpoint.Publish(new MotorcycleCreatedEvent(
+                    //    result.Value.Identifier,
+                    //    result.Value.Year,
+                    //    result.Value.Model,
+                    //    result.Value.Plate
+                    //));
 
                     return result;
                 },

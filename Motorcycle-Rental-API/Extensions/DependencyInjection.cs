@@ -196,10 +196,8 @@ namespace Motorcycle_Rental_API.Extensions
                 const string Entregador = "ENTREGADOR";
 
                 options.AddPolicy(Entregador, policy => policy.RequireRole(Entregador));
-   
-                //RequireAssertion - Permite definir uma expressão lambda e com uma condição customizada para autorização
-                options.AddPolicy(Admin, policy => policy.RequireAssertion(context =>
-                    context.User.HasClaim(claim => claim.Type == "id") ||context.User.IsInRole(Admin)));
+                options.AddPolicy("ADMIN", policy => policy.RequireRole(Admin));
+
 
             });
 

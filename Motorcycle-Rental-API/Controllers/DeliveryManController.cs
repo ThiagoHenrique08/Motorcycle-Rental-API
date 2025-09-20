@@ -12,7 +12,6 @@ namespace Motorcycle_Rental_API.Controllers
     {
         [HttpPost]
         [Authorize(Policy = "ENTREGADOR")]
-        [Authorize(Policy = "ADMIN")]
         public async Task<IActionResult> Create(
             [FromBody] CreateDeliveryManDTO dto,
             [FromServices] ICreateDeliveryManUseCase useCase,
@@ -28,7 +27,6 @@ namespace Motorcycle_Rental_API.Controllers
 
         [HttpPost("{id}/cnh")]
         [Authorize(Policy = "ENTREGADOR")]
-        [Authorize(Policy = "ADMIN")]
         public async Task<IActionResult> UploadCNH(
             string id,
             [FromBody] UploadCNHDTO dto,

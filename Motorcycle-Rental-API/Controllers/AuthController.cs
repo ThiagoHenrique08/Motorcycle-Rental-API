@@ -306,7 +306,6 @@ namespace Motorcycle_Rental_API.Controllers
                 return BadRequest("User name must be provided.");
             if (string.IsNullOrWhiteSpace(role))
                 return BadRequest("Role name must be provided.");
-
             // Busca usuário
             var user = await _userManager.FindByNameAsync(name);
             if (user is null)
